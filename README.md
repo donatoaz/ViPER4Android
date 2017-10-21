@@ -1,4 +1,4 @@
-## ViPER4Android Magisk v13 and v14 module
+## ViPER4Android Magisk v14 module
 
 This is a simple V4A module, for no frills setup - you simply grab it, flash it and use it.
 
@@ -9,6 +9,11 @@ Module is based on [original module](https://github.com/Magisk-Modules-Repo/ViPE
 Uses ViPER4Android 2.5.0.4 driver and **includes** Viper4Android app, so you don't have to install anything.
 
 **WARNING**: Since V4A app is systemlessly installed into /system/priv-app (just to stop your ROM from killing V4A too often), this module is possibly incompatible with AppSystemizer and similar modules and may cause undesirable/unpredictable behaviour when installed in conjuction with it. Be aware of this. If you want to use this module without provided app, edit updater-script manually or open an issue here/contact me on XDA to make flashable module without provided app.
+
+## Requirements
+* Android 5.0+ with fully functional Magisk installation,
+* **No other sound mods installed** - if you have any, remove them before this module is installed,
+* ARM/ARM64, x86 or x86_64 device with NEON support.
 
 ## Compatibility
 * Android 5.0 - Android 7.1.2
@@ -31,3 +36,6 @@ Uses ViPER4Android 2.5.0.4 driver and **includes** Viper4Android app, so you don
 ## Credits
 * [topjohnwu](https://github.com/topjohnwu): [Magisk](https://github.com/topjohnwu/Magisk) and [original Magisk module](https://github.com/Magisk-Modules-Repo/ViPER4Android/)
 * [ViPER520 and ZhuHang](http://vipersaudio.com/blog/): ViPER4Android development ([official XDA thread](https://forum.xda-developers.com/showthread.php?t=2191223))
+
+## Support
+If you have any problems with module itself, not V4A driver or app, please open issue on [my issue tracker](https://github.com/ShadySquirrel/ViPER4Android/issues). There is no support thread, and there never will be.
