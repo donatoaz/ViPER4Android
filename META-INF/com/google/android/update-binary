@@ -129,6 +129,7 @@ is_mounted $MOUNTPATH || abort "! $IMG mount failed..."
 rm -rf $MODPATH 2>/dev/null
 mkdir -p $MODPATH
 
+# Extract drivers and app.
 ui_print "- Extracting module files"
 unzip -o "$ZIP" 'drivers/*' 'app/*' -d $INSTALLER 2>/dev/null
 
@@ -136,58 +137,74 @@ unzip -o "$ZIP" 'drivers/*' 'app/*' -d $INSTALLER 2>/dev/null
 ui_print "* Creating files and directories"
 mkdir -p $MODPATH/system/lib/soundfx 2>/dev/null
 mkdir -p $MODPATH/system/etc 2>/dev/null
-mkdir -p $MODPATH/system/vendor/etc 2>/dev/null
+mkdir -p $MODPATH/system/vendor/etc 2>/dev/null # maybe I should move this one down to VENDOR_CONFIG block?
 mkdir -p $MODPATH/system/priv-app/ViPER4Android 2>/dev/null
 
-# copy app
-ui_print "* Installing V4A Materialized app"
-cp -af $INSTALLER/app/ViPER4Android.apk $MODPATH/system/priv-app/ViPER4Android/ViPER4Android.apk
+# Use variables for paths
+APK_PATH=$INSTALLER/app/ViPER4Android.apk
+DRIVER_PATH=$INSTALLER/drivers/libv4a_fx_jb_NEON.so
 
-# determine CPU arch and driver
-ui_print "* Determining your device's arch and installing driver"
-
-DRIVER=libv4a_fx_jb_NEON
-LIB=$INSTALLER/drivers/libv4a_fx_jb_NEON.so
-
-if [ "$ARCH" = "x86" -o "$ARCH" = "x64" ]; then
-	LIB=$INSTALLER/drivers/libv4a_fx_jb_X86.so
-	DRIVER=libv4a_fx_jb_X86
+# check if app is present, then copy it.
+if [ -f "$APK_PATH" ]; then
+	ui_print "* Installing V4A Materialized app"
+	cp -af $APK_PATH $MODPATH/system/priv-app/ViPER4Android/ViPER4Android.apk
+else
+	ui_print "! V4A App is missing from module!"
+	ui_print "! You will have to install the app manually!"
 fi
 
-ui_print "-> Your device is $ARCH, using $DRIVER"
+# Check if device is maybe x86 - Atoms, i3/i5/i7 etc.
+if [ "$ARCH" = "x86" -o "$ARCH" = "x64" ]; then
+	DRIVER_PATH=$INSTALLER/drivers/libv4a_fx_jb_X86.so
+else
+	# device isn't x86, check if it really is ARM device
+	if [ "$ARCH" != "arm" ] && [ "$ARCH" != "arm64" ]; then
+		abort "!! Unsupported arch: $ARCH, aborting!"
+	fi
+fi
 
 # copy driver
-ui_print "* Copying V4A driver"
-cp -af $LIB $MODPATH/system/lib/soundfx/libv4a_fx_ics.so
+if [ -f "$DRIVER_PATH" ]; then
+	ui_print "* Copying V4A driver for $ARCH"
+	cp -af $DRIVER_PATH $MODPATH/system/lib/soundfx/libv4a_fx_ics.so
+else
+	abort "!! Driver missing! Aborting!"
+fi
 
 # modify configurations
 ui_print "* Modifying audio_effects.conf"
-cp -af /system/etc/audio_effects.conf $MODPATH/system/etc/audio_effects.conf 2>/dev/null
-cp -af /system/etc/htc_audio_effects.conf $MODPATH/system/etc/htc_audio_effects.conf 2>/dev/null
-cp -af /system/vendor/etc/audio_effects.conf $MODPATH/system/vendor/etc/audio_effects.conf 2>/dev/null
 
-CONFIG_FILE=$MODPATH/system/etc/audio_effects.conf
-HTC_CONFIG_FILE=$MODPATH/system/etc/htc_audio_effects.conf
-VENDOR_CONFIG=$MODPATH/system/vendor/etc/audio_effects.conf
+CONFIG_FILE=/system/etc/audio_effects.conf
+HTC_CONFIG_FILE=/system/etc/htc_audio_effects.conf
+VENDOR_CONFIG=/system/vendor/etc/audio_effects.conf
 
 if [ -f "$CONFIG_FILE" ]; then
-  sed -i 's/^libraries {/libraries {\n  v4a_fx {\n    path \/system\/lib\/soundfx\/libv4a_fx_ics.so\n  }/g' $CONFIG_FILE
-  sed -i 's/^effects {/effects {\n  v4a_standard_fx {\n    library v4a_fx\n    uuid 41d3c987-e6cf-11e3-a88a-11aba5d5c51b\n  }/g' $CONFIG_FILE
+	ui_print "* Found $CONFIG_FILE, copying and modifying"
+	CFG="$MODPATH/$CONFIG_FILE"
+	cp -af $CONFIG_FILE $CFG 2>/dev/null
+	sed -i 's/^libraries {/libraries {\n  v4a_fx {\n    path \/system\/lib\/soundfx\/libv4a_fx_ics.so\n  }/g' $CFG
+	sed -i 's/^effects {/effects {\n  v4a_standard_fx {\n    library v4a_fx\n    uuid 41d3c987-e6cf-11e3-a88a-11aba5d5c51b\n  }/g' $CFG
 fi
 
 if [ -f "$HTC_CONFIG_FILE" ]; then
-  sed -i 's/^libraries {/libraries {\n  v4a_fx {\n    path \/system\/lib\/soundfx\/libv4a_fx_ics.so\n  }/g' $HTC_CONFIG_FILE
-  sed -i 's/^effects {/effects {\n  v4a_standard_fx {\n    library v4a_fx\n    uuid 41d3c987-e6cf-11e3-a88a-11aba5d5c51b\n  }/g' $HTC_CONFIG_FILE
+	ui_print "* Found $HTC_CONFIG_FILE, copying and modifying"
+	CFG="$MODPATH/$HTC_CONFIG_FILE"
+	cp -af $CONFIG_FILE $CFG 2>/dev/null
+	sed -i 's/^libraries {/libraries {\n  v4a_fx {\n    path \/system\/lib\/soundfx\/libv4a_fx_ics.so\n  }/g' $CFG
+	sed -i 's/^effects {/effects {\n  v4a_standard_fx {\n    library v4a_fx\n    uuid 41d3c987-e6cf-11e3-a88a-11aba5d5c51b\n  }/g' $CFG
 fi
 
 if [ -f "$VENDOR_CONFIG" ]; then
-  sed -i 's/^libraries {/libraries {\n  v4a_fx {\n    path \/system\/lib\/soundfx\/libv4a_fx_ics.so\n  }/g' $VENDOR_CONFIG
-  sed -i 's/^effects {/effects {\n  v4a_standard_fx {\n    library v4a_fx\n    uuid 41d3c987-e6cf-11e3-a88a-11aba5d5c51b\n  }/g' $VENDOR_CONFIG
+	ui_print "* Found $VENDOR_CONFIG, copying and modifying"
+	CFG="$MODPATH/$VENDOR_CONFIG"
+	cp -af $VENDOR_CONFIG $CFG 2>/dev/null
+	sed -i 's/^libraries {/libraries {\n  v4a_fx {\n    path \/system\/lib\/soundfx\/libv4a_fx_ics.so\n  }/g' $CFG
+	sed -i 's/^effects {/effects {\n  v4a_standard_fx {\n    library v4a_fx\n    uuid 41d3c987-e6cf-11e3-a88a-11aba5d5c51b\n  }/g' $CFG
 fi
 
 # Handle replace folders
 for TARGET in $REPLACE; do
-  mktouch $MODPATH$TARGET/.replace
+	mktouch $MODPATH$TARGET/.replace
 done
 
 # Auto Mount
@@ -199,9 +216,9 @@ $PROPFILE && cp -af $INSTALLER/common/system.prop $MODPATH/system.prop
 # Module info
 cp -af $INSTALLER/module.prop $MODPATH/module.prop
 if $BOOTMODE; then
-  # Update info for Magisk Manager
-  mktouch /magisk/$MODID/update
-  cp -af $INSTALLER/module.prop /magisk/$MODID/module.prop
+	# Update info for Magisk Manager
+	mktouch /magisk/$MODID/update
+	cp -af $INSTALLER/module.prop /magisk/$MODID/module.prop
 fi
 
 # post-fs-data mode scripts
@@ -224,8 +241,8 @@ rmdir $MOUNTPATH
 image_size_check $IMG
 newSizeM=$((curUsedM / 32 * 32 + 64))
 if [ $curSizeM -gt $newSizeM ]; then
-  ui_print "- Shrinking $IMG to ${newSizeM}M"
-  $MAGISKBIN/magisk --resizeimg $IMG $newSizeM
+	ui_print "- Shrinking $IMG to ${newSizeM}M"
+	$MAGISKBIN/magisk --resizeimg $IMG $newSizeM
 fi
 
 $BOOTMODE || recovery_cleanup
