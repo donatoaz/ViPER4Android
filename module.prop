@@ -3,5 +3,5 @@ name=ViPER4Android FX for Magisk v14+
 version=v2.5.0.5
 versionCode=3
 author=ShadySquirrel
-description=Pure Viper4Android module for Magisk v14+ - no frameworks, no patches, no frills.
+description=Pure ViPER4Android module for Magisk v14+ - no frameworks, no patches, no frills. Contains ViPER4Android Materialized app.
 template=1400
