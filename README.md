@@ -1,4 +1,4 @@
-## ViPER4Android Magisk v14 module
+# ViPER4Android Magisk module
 
 This is a simple V4A module, for no frills setup - you simply grab it, flash it and use it.
 
@@ -6,7 +6,7 @@ No configuration, no additional frameworks, no special requirements, no hacks, n
 
 Module is based on [original module](https://github.com/Magisk-Modules-Repo/ViPER4Android/) made by [topjohnwu](https://github.com/topjohnwu).
 
-Uses ViPER4Android 2.5.0.4 driver and **includes** Viper4Android app, so you don't have to install anything.
+Uses ViPER4Android 2.5.0.4 driver and **includes** ViPER4Android FX app, so you don't have to install anything.
 
 **WARNING**: Since V4A app is systemlessly installed into /system/priv-app (just to stop your ROM from killing V4A too often), this module is possibly incompatible with AppSystemizer and similar modules and may cause undesirable/unpredictable behaviour when installed in conjuction with it. Be aware of this. If you want to use this module without provided app, edit updater-script manually or open an issue here/contact me on XDA to make flashable module without provided app.
 
@@ -39,3 +39,17 @@ Uses ViPER4Android 2.5.0.4 driver and **includes** Viper4Android app, so you don
 
 ## Support
 If you have any problems with module itself, not V4A driver or app, please open issue on [my issue tracker](https://github.com/ShadySquirrel/ViPER4Android/issues). There is no support thread, and there never will be.
+
+### Issue tracking guidelines
+If your problem with V4A is strictly connected to the module (module not installing, sepolicy not being injected etc. or not working, V4A app says everything is okay but problems with processing audio exist etc.), this is info you have to provide when you're opening issue on [my issue tracker](https://github.com/ShadySquirrel/ViPER4Android/issues):
+
+* Module and Magisk version,
+* Phone model, OS and version,
+* List of installed modules,
+* Is any other sound mod installed?
+* Logs - logcat, FULL kmsg, Magisk log,
+* audio_effects.conf file from /system/etc, /system/vendor/etc, or *wherever* is your audio effects configuration,
+* A description of an issue or debugging info you may have or find usable.
+
+Issues opened without required information will be automatically closed and discarded.
+
