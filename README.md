@@ -1,4 +1,4 @@
-## ViPER4Android Magisk module
+# ViPER4Android Magisk module
 
 This is a simple V4A module, for no frills setup - you simply grab it, flash it and use it.
 
@@ -38,3 +38,17 @@ Uses ViPER4Android 2.5.0.4 driver and **includes** [ViPER4Android FX Materialize
 
 ## Support
 If you have any problems with module itself, not V4A driver or app, please open issue on [my issue tracker](https://github.com/ShadySquirrel/ViPER4Android/issues). There is no support thread, and there never will be.
+
+### Issue tracking guidelines
+If your problem with V4A is strictly connected to the module (module not installing, sepolicy not being injected etc. or not working, V4A app says everything is okay but problems with processing audio exist etc.), this is info you have to provide when you're opening issue on [my issue tracker](https://github.com/ShadySquirrel/ViPER4Android/issues):
+
+* Module and Magisk version,
+* Phone model, OS and version,
+* List of installed modules,
+* Is any other sound mod installed?
+* Logs - logcat, FULL kmsg, Magisk log,
+* audio_effects.conf file from /system/etc, /system/vendor/etc, or *wherever* is your audio effects configuration,
+* A description of an issue or debugging info you may have or find usable.
+
+Issues opened without required information will be automatically closed and discarded.
+
