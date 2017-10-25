@@ -27,7 +27,7 @@ Uses ViPER4Android 2.5.0.4 driver and **includes** [ViPER4Android FX Materialize
 	* Configuration file management is now bit different, still more to change,
 	* New versioning system, allowing users to keep old module versions on their phones
 	* Cosmetic changes.
-	* Added a mention about version (still using V4A Materalized)[https://github.com/ShadySquirrel/ViPER4Android/releases]
+	* Added a mention about version  [still using V4A Materalized](https://github.com/ShadySquirrel/ViPER4Android/releases)
 * 08.10.2017 - Merged SELinux fixes
 	* Thanks to [zertyuiop](https://github.com/zertyuiop/ViPER4Android)
 * 06.09.2017 - Update to template version 1400
