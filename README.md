@@ -22,6 +22,12 @@ Uses ViPER4Android 2.5.0.4 driver and **includes** ViPER4Android FX app, so you 
 * arm, arm64, x86 and x86_64 devices
 
 ## Module changelog
+* 26.10.2017 - Improvements
+	* Installation script is now more verbose, allows installation without an app (you'll still have to remove it manually from file) and includes fail-safe checks for arch, library etc,
+	* Configuration file management is now bit different, still more to change,
+	* New versioning system, allowing users to keep old module versions on their phones
+	* Cosmetic changes.
+	* Added a mention about version (still using V4A Materalized)[https://github.com/ShadySquirrel/ViPER4Android/releases]
 * 21.10.2017 - Replaced Viper4Android Materialized with original V4A App
 	* Google Play Protect doesn't like Materialized app for some reason, for some users. Thanks to [exadeci](https://github.com/exadeci/ViPER4Android) for a pull request with original app
 * 08.10.2017 - Merged SELinux fixes
