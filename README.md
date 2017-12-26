@@ -4,7 +4,7 @@ This is a simple V4A module, for no frills setup - you simply grab it, flash it 
 
 No configuration, no additional frameworks, no special requirements, no hacks, no mess. It just works.
 
-Module is based on [original module](https://github.com/Magisk-Modules-Repo/ViPER4Android/) made by [topjohnwu](https://github.com/topjohnwu).
+Module is based on original module made by [topjohnwu](https://github.com/topjohnwu).
 
 Uses ViPER4Android 2.5.0.4 driver and **includes** ViPER4Android FX app, so you don't have to install anything.
 
@@ -19,10 +19,11 @@ Uses ViPER4Android 2.5.0.4 driver and **includes** ViPER4Android FX app, so you 
 
 ## Compatibility
 * Android 5.0 - Android 7.1.2
-* Magisk v13.1 and later (uses template v4/1400)
+* Magisk v15 and later (uses template 1500)
 * arm, arm64, x86 and x86_64 devices
 
 ## Module changelog
+* 27.12.2017 - Update to template version 1500
 * 26.10.2017 - Improvements
 	* Installation script is now more verbose, allows installation without an app (you'll still have to remove it manually from file) and includes fail-safe checks for arch, library etc,
 	* Configuration file management is now bit different, still more to change,
