@@ -1,7 +1,7 @@
 id=viper4android
-name=ViPER4Android FX for Magisk v14+
-version=v4.0
-versionCode=5
+name=ViPER4Android FX for Magisk v15
+version=v5.0
+versionCode=6
 author=ShadySquirrel
 description=Pure ViPER4Android module for Magisk v14+ - no frameworks, no patches, no frills.
-template=1400
+minMagisk=1500
