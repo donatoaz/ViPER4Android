@@ -106,14 +106,29 @@ install_v4a_module() {
 	APK_PATH=$INSTALLER/app/ViPER4Android.apk
 	DRIVER_PATH=$INSTALLER/drivers/libv4a_fx_jb_NEON.so
 
-	ui_print "* Using path $MODPATH"
-	ui_print "* Using temp $INSTALLER"
+	ui_print "* Module path: $MODPATH"
+	ui_print "* Temporary path: $INSTALLER"
 	ui_print "* APK is in $APK_PATH"
 	ui_print "* Default driver is $DRIVER_PATH"
 	
 	ui_print "* Extracting module files"
 	unzip -o "$ZIP" 'drivers/*' 'app/*' -d $INSTALLER 2>/dev/null
-
+	
+	# do a bit of a cleanup, if some effects are already there
+	# so far, blacklisting only AudioFX and MusicFX because I'm sure they exist.
+	ui_print "* Checking for existing audio libs and effects"
+	# MusicFX
+	if [ -d "/system/priv-app/MusicFX" ]; then
+		ui_print " -> Found MusicFX, blacklisting."
+		mkdir -p "$MODPATH/system/priv-app/MusicFX" 2>/dev/null
+		touch "$MODPATH/system/priv-app/MusicFX/.replace"
+	# AudioFX
+	elif [ -d "/system/priv-app/AudioFX" ]; then
+		ui_print " -> Found AudioFX, blacklisting."
+		mkdir -p "$MODPATH/system/priv-app/AudioFX" 2>/dev/null
+		touch "$MODPATH/system/priv-app/AudioFX/.replace"
+	fi
+	
 	# create skeleton files and dirs
 	ui_print "* Creating driver paths"
 	mkdir -p $MODPATH/system/lib/soundfx 2>/dev/null
