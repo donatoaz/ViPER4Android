@@ -1,7 +1,7 @@
 id=viper4android_material
 name=ViPER4Android FX Materialized for Magisk v15
-version=v5.1
-versionCode=7
+version=v5.2
+versionCode=8
 author=ShadySquirrel
 description=Pure ViPER4Android module for Magisk - no frameworks, no patches, no frills. Contains ViPER4Android Materialized app.
 minMagisk=1500

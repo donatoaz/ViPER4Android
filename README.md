@@ -18,11 +18,15 @@ Uses ViPER4Android 2.5.0.4 driver and **includes** [ViPER4Android FX Materialize
 * ARM/ARM64, x86 or x86_64 device with NEON support.
 
 ## Compatibility
-* Android 5.0 - Android 7.1.2
+* Android 5.x - Android 8.x
 * Magisk v15 and later (uses template 1500)
 * arm, arm64, x86 and x86_64 devices
 
 ## Module changelog
+* 21.01.2018 - Module updates
+	* Added support for XML audio effects configuration which some of new or Oreo updated devices are using
+	* Added SEPolicy fixes for OxygenOS Oreo
+	* Added SEPolicy fixes for other Oreo ROMs (tested on stock Mi A1 and Pixel XL)
 * 27.12.2017 - Update to template version 1500
 * 26.10.2017 - Improvements
 	* Installation script is now more verbose, allows installation without an app (you'll still have to remove it manually from file) and includes fail-safe checks for arch, library etc,
