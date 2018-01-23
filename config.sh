@@ -157,39 +157,49 @@ install_v4a_module() {
 	HTC_CONFIG_FILE=/system/etc/htc_audio_effects.conf
 	VENDOR_CONFIG=/system/vendor/etc/audio_effects.conf
 	NEW_CONFIG_FILE=/vendor/etc/audio_effects.xml
+	NEW_SYS_CONFIG_FILE=/system/vendor/etc/audio_effects.xml
 
 	if [ -f "$CONFIG_FILE" ]; then
 		ui_print "* Found $CONFIG_FILE, copying and modifying"
-		mkdir -p $MODPATH/system/etc 2>/dev/null
+		mkdir -p $MODPATH/system/etc
 		CFG="$MODPATH/$CONFIG_FILE"
-		cp -af $CONFIG_FILE $CFG 2>/dev/null
+		cp -af $CONFIG_FILE $CFG
 		sed -i 's/^libraries {/libraries {\n  v4a_fx {\n    path \/system\/lib\/soundfx\/libv4a_fx_ics.so\n  }/g' $CFG
 		sed -i 's/^effects {/effects {\n  v4a_standard_fx {\n    library v4a_fx\n    uuid 41d3c987-e6cf-11e3-a88a-11aba5d5c51b\n  }/g' $CFG
 	fi
 
 	if [ -f "$HTC_CONFIG_FILE" ]; then
 		ui_print "* Found $HTC_CONFIG_FILE, copying and modifying"
-		mkdir -p $MODPATH/system/etc 2>/dev/null
+		mkdir -p $MODPATH/system/etc
 		CFG="$MODPATH/$HTC_CONFIG_FILE"
-		cp -af $HTC_CONFIG_FILE $CFG 2>/dev/null
+		cp -af $HTC_CONFIG_FILE $CFG
 		sed -i 's/^libraries {/libraries {\n  v4a_fx {\n    path \/system\/lib\/soundfx\/libv4a_fx_ics.so\n  }/g' $CFG
 		sed -i 's/^effects {/effects {\n  v4a_standard_fx {\n    library v4a_fx\n    uuid 41d3c987-e6cf-11e3-a88a-11aba5d5c51b\n  }/g' $CFG
 	fi
 
 	if [ -f "$VENDOR_CONFIG" ]; then
 		ui_print "* Found $VENDOR_CONFIG, copying and modifying"
-		mkdir -p $MODPATH/system/vendor/etc 2>/dev/null
+		mkdir -p $MODPATH/system/vendor/etc
 		CFG="$MODPATH/$VENDOR_CONFIG"
-		cp -af $VENDOR_CONFIG $CFG 2>/dev/null
+		cp -af $VENDOR_CONFIG $CFG
 		sed -i 's/^libraries {/libraries {\n  v4a_fx {\n    path \/system\/lib\/soundfx\/libv4a_fx_ics.so\n  }/g' $CFG
 		sed -i 's/^effects {/effects {\n  v4a_standard_fx {\n    library v4a_fx\n    uuid 41d3c987-e6cf-11e3-a88a-11aba5d5c51b\n  }/g' $CFG
 	fi
 	
 	if [ -f "$NEW_CONFIG_FILE" ]; then
 		ui_print "* Found $NEW_CONFIG_FILE, copying and modifying"
-		mkdir -p $MODPATH/vendor/etc 2>/dev/null
+		mkdir -p $MODPATH/vendor/etc
 		CFG="$MODPATH/$NEW_CONFIG_FILE"
-		cp -af $NEW_CONFIG_FILE $CFG 2>/dev/null
+		cp -af $NEW_CONFIG_FILE $CFG
+		sed -i 's/^    <libraries>/    <libraries>\n        <library name="v4a_fx" path="libv4a_fx_ics.so"\/>/g' $CFG
+		sed -i 's/^    <effects>/    <effects>\n        <effect name="v4a_standard_fx" library="v4a_fx" uuid="41d3c987-e6cf-11e3-a88a-11aba5d5c51b"\/>/g' $CFG
+	fi
+	
+	if [ -f "$NEW_SYS_CONFIG_FILE" ]; then
+		ui_print "* Found $NEW_SYS_CONFIG_FILE, copying and modifying"
+		mkdir -p $MODPATH/system/vendor/etc
+		CFG="$MODPATH/$NEW_SYS_CONFIG_FILE"
+		cp -af $NEW_SYS_CONFIG_FILE $CFG
 		sed -i 's/^    <libraries>/    <libraries>\n        <library name="v4a_fx" path="libv4a_fx_ics.so"\/>/g' $CFG
 		sed -i 's/^    <effects>/    <effects>\n        <effect name="v4a_standard_fx" library="v4a_fx" uuid="41d3c987-e6cf-11e3-a88a-11aba5d5c51b"\/>/g' $CFG
 	fi
