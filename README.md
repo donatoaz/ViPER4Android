@@ -23,6 +23,10 @@ Uses ViPER4Android 2.5.0.4 driver and **includes** ViPER4Android FX app, so you 
 * arm, arm64, x86 and x86_64 devices
 
 ## Module changelog
+* 25.01.2018 - Module updates
+	*	Added Dirac to effects blacklist
+	* Added one more effects path
+	* Cosmetic: added git ignore and changed identation.
 * 21.01.2018 - Module updates
 	* Added support for XML audio effects configuration which some of new or Oreo updated devices are using
 	* Added SEPolicy fixes for OxygenOS Oreo
@@ -65,4 +69,3 @@ If your problem with V4A is strictly connected to the module (module not install
 * A description of an issue or debugging info you may have or find usable.
 
 Issues opened without required information will be automatically closed and discarded.
-
