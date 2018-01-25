@@ -160,58 +160,28 @@ install_v4a_module() {
     abort "!! Driver missing! Aborting!"
   fi
 
-  ui_print "* Modifying audio_effects.conf"
+	ui_print "* Modifying audio_effects.conf"
+  CFGS="${CFGS} $(find -L /system -type f -name "*audio_effects*.conf")"
+  CFGSXML="${CFGSXML} $(find -L /system -type f -name "*audio_effects*.xml")"
 
-  CONFIG_FILE=/system/etc/audio_effects.conf
-  HTC_CONFIG_FILE=/system/etc/htc_audio_effects.conf
-  VENDOR_CONFIG=/system/vendor/etc/audio_effects.conf
-  NEW_CONFIG_FILE=/vendor/etc/audio_effects.xml
-  NEW_SYS_CONFIG_FILE=/system/vendor/etc/audio_effects.xml
-
-  if [ -f "$CONFIG_FILE" ]; then
-    ui_print "* Found $CONFIG_FILE, copying and modifying"
-    mkdir -p $MODPATH/system/etc
-    CFG="$MODPATH/$CONFIG_FILE"
-    cp -af $CONFIG_FILE $CFG
-    sed -i 's/^libraries {/libraries {\n  v4a_fx {\n    path \/system\/lib\/soundfx\/libv4a_fx_ics.so\n  }/g' $CFG
-    sed -i 's/^effects {/effects {\n  v4a_standard_fx {\n    library v4a_fx\n    uuid 41d3c987-e6cf-11e3-a88a-11aba5d5c51b\n  }/g' $CFG
-  fi
-
-  if [ -f "$HTC_CONFIG_FILE" ]; then
-    ui_print "* Found $HTC_CONFIG_FILE, copying and modifying"
-    mkdir -p $MODPATH/system/etc
-    CFG="$MODPATH/$HTC_CONFIG_FILE"
-    cp -af $HTC_CONFIG_FILE $CFG
-    sed -i 's/^libraries {/libraries {\n  v4a_fx {\n    path \/system\/lib\/soundfx\/libv4a_fx_ics.so\n  }/g' $CFG
-    sed -i 's/^effects {/effects {\n  v4a_standard_fx {\n    library v4a_fx\n    uuid 41d3c987-e6cf-11e3-a88a-11aba5d5c51b\n  }/g' $CFG
-  fi
-
-  if [ -f "$VENDOR_CONFIG" ]; then
-    ui_print "* Found $VENDOR_CONFIG, copying and modifying"
-    mkdir -p $MODPATH/system/vendor/etc
-    CFG="$MODPATH/$VENDOR_CONFIG"
-    cp -af $VENDOR_CONFIG $CFG
-    sed -i 's/^libraries {/libraries {\n  v4a_fx {\n    path \/system\/lib\/soundfx\/libv4a_fx_ics.so\n  }/g' $CFG
-    sed -i 's/^effects {/effects {\n  v4a_standard_fx {\n    library v4a_fx\n    uuid 41d3c987-e6cf-11e3-a88a-11aba5d5c51b\n  }/g' $CFG
-  fi
-
-  if [ -f "$NEW_CONFIG_FILE" ]; then
-    ui_print "* Found $NEW_CONFIG_FILE, copying and modifying"
-    mkdir -p $MODPATH/vendor/etc
-    CFG="$MODPATH/$NEW_CONFIG_FILE"
-    cp -af $NEW_CONFIG_FILE $CFG
-    sed -i 's/^    <libraries>/    <libraries>\n        <library name="v4a_fx" path="libv4a_fx_ics.so"\/>/g' $CFG
-    sed -i 's/^    <effects>/    <effects>\n        <effect name="v4a_standard_fx" library="v4a_fx" uuid="41d3c987-e6cf-11e3-a88a-11aba5d5c51b"\/>/g' $CFG
-  fi
-
-  if [ -f "$NEW_SYS_CONFIG_FILE" ]; then
-    ui_print "* Found $NEW_SYS_CONFIG_FILE, copying and modifying"
-    mkdir -p $MODPATH/system/vendor/etc
-    CFG="$MODPATH/$NEW_SYS_CONFIG_FILE"
-    cp -af $NEW_SYS_CONFIG_FILE $CFG
-    sed -i 's/^    <libraries>/    <libraries>\n        <library name="v4a_fx" path="libv4a_fx_ics.so"\/>/g' $CFG
-    sed -i 's/^    <effects>/    <effects>\n        <effect name="v4a_standard_fx" library="v4a_fx" uuid="41d3c987-e6cf-11e3-a88a-11aba5d5c51b"\/>/g' $CFG
-  fi
+  for FILE in ${CFGS}; do
+    ui_print "* Found $FILE, copying and modifying"
+    mkdir -p $(dirname $MODPATH$FILE)
+    cp -f $FILE $MODPATH$FILE
+    sed -i "/v4a_standard_fx {/,/}/d" $MODPATH$FILE
+    sed -i "/v4a_fx {/,/}/d" $MODPATH$FILE
+    sed -i "s/^effects {/effects {\n  v4a_standard_fx {\n    library v4a_fx\n    uuid 41d3c987-e6cf-11e3-a88a-11aba5d5c51b\n  }/g" $MODPATH$FILE
+    sed -i "s/^libraries {/libraries {\n  v4a_fx {\n    path \/system\/lib\/soundfx\/libv4a_fx_ics.so\n  }/g" $MODPATH$FILE
+  done
+  for FILE in ${CFGSXML}; do
+    ui_print "* Found $FILE, copying and modifying"
+    mkdir -p $(dirname $MODPATH$FILE)
+    cp -f $FILE $MODPATH$FILE
+    sed -i "/v4a_standard_fx/d" $MODPATH$FILE
+    sed -i "/v4a_fx/d" $MODPATH$FILE
+    sed -i "/<libraries>/ a\        <library name=\"v4a_fx\" path=\"libv4a_fx_ics.so\"\/>" $MODPATH$FILE
+    sed -i "/<effects>/ a\        <effect name=\"v4a_standard_fx\" library=\"v4a_fx\" uuid=\"41d3c987-e6cf-11e3-a88a-11aba5d5c51b\"\/>" $MODPATH$FILE
+  done
 
   # Looks like encrypted android doesn't like magic mounted apps - I got bunch of failures after module flash.
   # unless I wipe caches and let it wait. Warn users about that.
