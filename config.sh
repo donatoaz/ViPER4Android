@@ -114,12 +114,14 @@ blacklist_effects() {
     if [ -d "$effect" ]; then
       name=$(basename "$effect")
       ui_print "-> Found $name, blacklisting"
-      mkdir -p "$MODPATH/$effect" 2>/dev/null
-      touch "$MODPATH/$effect/.replace"
+      pth = "$MODPATH$effect/.replace"
+      mkdir -p $(dirname "$pth")
+      touch "$pth"
     fi
   done
 
 }
+
 # This function extracts drivers and app.
 install_v4a_module() {
   APK_PATH=$INSTALLER/app/ViPER4Android.apk
