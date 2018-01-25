@@ -160,7 +160,7 @@ install_v4a_module() {
     abort "!! Driver missing! Aborting!"
   fi
 
-	ui_print "* Modifying audio_effects.conf"
+  ui_print "* Modifying audio_effects.conf"
   CFGS="${CFGS} $(find -L /system -type f -name "*audio_effects*.conf")"
   CFGSXML="${CFGSXML} $(find -L /system -type f -name "*audio_effects*.xml")"
 
