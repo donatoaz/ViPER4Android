@@ -167,7 +167,7 @@ install_v4a_module() {
   for FILE in ${CFGS}; do
     ui_print "-> Found $FILE, copying and modifying"
     mkdir -p $(dirname $MODPATH$FILE)
-    cp -f $FILE $MODPATH$FILE
+    cp -af $FILE $MODPATH$FILE
     sed -i "/v4a_standard_fx {/,/}/d" $MODPATH$FILE
     sed -i "/v4a_fx {/,/}/d" $MODPATH$FILE
     sed -i "s/^effects {/effects {\n  v4a_standard_fx {\n    library v4a_fx\n    uuid 41d3c987-e6cf-11e3-a88a-11aba5d5c51b\n  }/g" $MODPATH$FILE
@@ -177,7 +177,7 @@ install_v4a_module() {
   for FILE in ${CFGSXML}; do
     ui_print "-> Found $FILE, copying and modifying"
     mkdir -p $(dirname $MODPATH$FILE)
-    cp -f $FILE $MODPATH$FILE
+    cp -af $FILE $MODPATH$FILE
     sed -i "/v4a_standard_fx/d" $MODPATH$FILE
     sed -i "/v4a_fx/d" $MODPATH$FILE
     sed -i "/<libraries>/ a\        <library name=\"v4a_fx\" path=\"libv4a_fx_ics.so\"\/>" $MODPATH$FILE
