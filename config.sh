@@ -160,12 +160,12 @@ install_v4a_module() {
     abort "!! Driver missing! Aborting!"
   fi
 
-  ui_print "* Modifying audio_effects.conf"
+  ui_print "* Modifying audio effects configuration"
   CFGS="${CFGS} $(find -L /system -type f -name "*audio_effects*.conf")"
   CFGSXML="${CFGSXML} $(find -L /system -type f -name "*audio_effects*.xml")"
 
   for FILE in ${CFGS}; do
-    ui_print "* Found $FILE, copying and modifying"
+    ui_print "-> Found $FILE, copying and modifying"
     mkdir -p $(dirname $MODPATH$FILE)
     cp -f $FILE $MODPATH$FILE
     sed -i "/v4a_standard_fx {/,/}/d" $MODPATH$FILE
@@ -173,8 +173,9 @@ install_v4a_module() {
     sed -i "s/^effects {/effects {\n  v4a_standard_fx {\n    library v4a_fx\n    uuid 41d3c987-e6cf-11e3-a88a-11aba5d5c51b\n  }/g" $MODPATH$FILE
     sed -i "s/^libraries {/libraries {\n  v4a_fx {\n    path \/system\/lib\/soundfx\/libv4a_fx_ics.so\n  }/g" $MODPATH$FILE
   done
+
   for FILE in ${CFGSXML}; do
-    ui_print "* Found $FILE, copying and modifying"
+    ui_print "-> Found $FILE, copying and modifying"
     mkdir -p $(dirname $MODPATH$FILE)
     cp -f $FILE $MODPATH$FILE
     sed -i "/v4a_standard_fx/d" $MODPATH$FILE
