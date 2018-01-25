@@ -110,7 +110,7 @@ blacklist_effects() {
     "/system/app/DiracManager"
   )
 
-  for effect in $(EFFECT_LIST[*]); do
+  for effect in ${EFFECT_LIST[*]}; do
     if [ -d "$effect" ]; then
       name=$(basename "$effect")
       ui_print "-> Found $name, blacklisting"
