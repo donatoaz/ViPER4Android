@@ -101,6 +101,25 @@ set_permissions() {
 # difficult for you to migrate your modules to newer template versions.
 # Make update-binary as clean as possible, try to only do function calls in it.
 
+# This function blacklists modules/effects known to mess with V4A
+blacklist_effects() {
+  EFFECT_LIST=(
+    "/system/priv-app/MusicFX"
+    "/system/priv-app/AudioFX"
+    "/system/app/DiracAudioControlService"
+    "/system/app/DiracManager"
+  )
+
+  for effect in $(EFFECT_LIST[*]); do
+    if [ -d "$effect" ]; then
+      name=$(basename "$effect")
+      ui_print "-> Found $name, blacklisting"
+      mkdir -p "$MODPATH/$effect" 2>/dev/null
+      touch "$MODPATH/$effect/.replace"
+    fi
+  done
+
+}
 # This function extracts drivers and app.
 install_v4a_module() {
   APK_PATH=$INSTALLER/app/ViPER4Android.apk
@@ -117,26 +136,7 @@ install_v4a_module() {
   # do a bit of a cleanup, if some effects are already there
   # so far, blacklisting only AudioFX and MusicFX because I'm sure they exist.
   ui_print "* Checking for existing audio libs and effects"
-  # MusicFX
-  if [ -d "/system/priv-app/MusicFX" ]; then
-    ui_print " -> Found MusicFX, blacklisting."
-    mkdir -p "$MODPATH/system/priv-app/MusicFX" 2>/dev/null
-    touch "$MODPATH/system/priv-app/MusicFX/.replace"
-    # AudioFX
-  elif [ -d "/system/priv-app/AudioFX" ]; then
-    ui_print " -> Found AudioFX, blacklisting."
-    mkdir -p "$MODPATH/system/priv-app/AudioFX" 2>/dev/null
-    touch "$MODPATH/system/priv-app/AudioFX/.replace"
-    # Dirac
-  elif [ -d "/system/app/DiracAudioControlService" ]; then
-    ui_print "-> Found Dirac ACS, blacklisting"
-    mkdir -p "$MODPATH/system/app/DiracAudioControlService" 2>/dev/null
-    touch "$MODPATH/system/app/DiracAudioControlService/.replace"
-  elif [ -d "/system/app/DiracManager" ]; then
-    ui_print "-> Found Dirac Manager, blacklisting"
-    mkdir -p "$MODPATH/system/app/DiracManager" 2>/dev/null
-    touch "$MODPATH/system/app/DiracManager/.replace"
-  fi
+  blacklist_effects
 
   # create skeleton files and dirs
   ui_print "* Creating driver paths"
@@ -203,7 +203,7 @@ install_v4a_module() {
     sed -i 's/^    <libraries>/    <libraries>\n        <library name="v4a_fx" path="libv4a_fx_ics.so"\/>/g' $CFG
     sed -i 's/^    <effects>/    <effects>\n        <effect name="v4a_standard_fx" library="v4a_fx" uuid="41d3c987-e6cf-11e3-a88a-11aba5d5c51b"\/>/g' $CFG
   fi
-  
+
   if [ -f "$NEW_SYS_CONFIG_FILE" ]; then
     ui_print "* Found $NEW_SYS_CONFIG_FILE, copying and modifying"
     mkdir -p $MODPATH/system/vendor/etc
