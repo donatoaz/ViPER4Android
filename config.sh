@@ -114,7 +114,7 @@ blacklist_effects() {
     if [ -d "$effect" ]; then
       name=$(basename "$effect")
       ui_print "-> Found $name, blacklisting"
-      pth = "$MODPATH$effect/.replace"
+      pth="$MODPATH$effect/.replace"
       mkdir -p $(dirname "$pth")
       touch "$pth"
     fi
