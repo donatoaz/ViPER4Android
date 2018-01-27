@@ -23,6 +23,12 @@ Uses ViPER4Android 2.5.0.4 driver and **includes** ViPER4Android FX app, so you 
 * arm, arm64, x86 and x86_64 devices
 
 ## Module changelog
+* 27.01.2018 - Installation logic rewrite
+	* Complete configuration edit logic rewrite - thanks to @Zackptg5 for code and suggestions! Here is what's new:
+		- Script is now checking for existing entries, and removing them before writing new ones
+		- Coniguration files aren't added manually anymore - script is searching for them all, so all paths and all names should be covered
+	* Effect blacklisting is moved to separate function - it's simpler just ading a path instead of repeating checks
+	* Some code and comment/message style changes and updates
 * 25.01.2018 - Module updates
 	*	Added Dirac to effects blacklist
 	* Added one more effects path
